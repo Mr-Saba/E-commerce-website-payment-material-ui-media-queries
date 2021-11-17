@@ -30,9 +30,9 @@ import Badge from '@mui/material/Badge';
 const Header = ({totalItems}) => {
 
   const scrollOnClick = () => {
-    if(window.innerWidth < 600) {
+    if(window.innerWidth < 500) {
       window.scrollTo({
-            top: 1550,
+            top: 1500,
             behavior: "smooth"
         })
     } else {

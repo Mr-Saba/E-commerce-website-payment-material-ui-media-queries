@@ -5,7 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-
+import {Link} from 'react-router-dom'
 import Button from '@mui/material/Button';
 
 
@@ -16,8 +16,7 @@ const Cart = ({cart, onRemoveFromCart, onUpdateCartQuantity}) => {
     const classes = useStyles()
     
     useEffect(() => {
-        console.log(cart)
-    }, [cart])
+    }, [])
 
     if (!cart.line_items) return 'Loading';
 
@@ -31,7 +30,6 @@ const Cart = ({cart, onRemoveFromCart, onUpdateCartQuantity}) => {
                     <Table>                  
                         <TableBody>
                             {cart.line_items.map(item => {
-                                console.log(item.price)
                             return( 
                                 <TableRow
                                 className={classes.table}
@@ -56,7 +54,11 @@ const Cart = ({cart, onRemoveFromCart, onUpdateCartQuantity}) => {
                     <Typography className={classes.subtotal} gutterBottom component="div">
                         Subtotal: {cart.subtotal.raw}ლ
                     </Typography>
-                    <Button style={{color: 'black', outlineColor: 'black'}} variant="outlined" className={classes.checkoutButton}>checkout</Button>
+                    <Link style={{textDecoration: "none"}} to="./checkout">
+                    <Button style={{color: 'black'}} variant="outlined" className={classes.checkoutButton}>
+                        checkout
+                    </Button>
+                    </Link>
                 </div>
             </div> 
         : <h1 style={{display: 'flex', justifyContent: 'center'}}>There is no items in cart</h1>    

@@ -9,7 +9,7 @@ import useStyles from './styles';
 
 const steps = ['Shipping address', 'Payment details'];
 
-const Checkout = ({ cart, onCaptureCheckout, order, error }) => {
+const Checkout = ({ isFinished, setIsFinished, cart, onCaptureCheckout, order, error, success, setSuccess }) => {
   const [checkoutToken, setCheckoutToken] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
   const [shippingData, setShippingData] = useState({});
@@ -37,16 +37,15 @@ const Checkout = ({ cart, onCaptureCheckout, order, error }) => {
   
   const test = (data) => {
     setShippingData(data);
-
+    
     nextStep();
   };
-
-  let Confirmation = () => (order.customer ? (
+  
+  let Confirmation = () => (isFinished ? (
     <>
       <div>
-        <Typography variant="h5">Thank you for your purchase, {order.customer.firstname} {order.customer.lastname}!</Typography>
+        <Typography variant="h5">Thank you for your purchase, {shippingData?.firstName} {shippingData?.lastName}!</Typography>
         <Divider className={classes.divider} />
-        <Typography variant="subtitle2">Order ref: {order.customer_reference}</Typography>
       </div>
       <br />
       <Button component={Link} variant="outlined" type="button" to="/">Back to home</Button>
@@ -56,23 +55,24 @@ const Checkout = ({ cart, onCaptureCheckout, order, error }) => {
       <CircularProgress />
     </div>
   ));
-
+  
   if (error) {
     Confirmation = () => (
       <>
-        <Typography variant="h5">Error: {error}</Typography>
+        <Typography variant="h5">Error: {error && error}</Typography>
         <br />
         <Button component={Link} variant="outlined" type="button" to="/">Back to home</Button>
       </>
     );
-  }
-
+  } 
+  
+  
   const Form = () => (activeStep === 0
     ? <AddressForm checkoutToken={checkoutToken} nextStep={nextStep} setShippingData={setShippingData} test={test} />
-    : <PaymentForm checkoutToken={checkoutToken} nextStep={nextStep} backStep={backStep} shippingData={shippingData} onCaptureCheckout={onCaptureCheckout} />);
+    : <PaymentForm setIsFinished={setIsFinished} checkoutToken={checkoutToken} nextStep={nextStep} backStep={backStep} shippingData={shippingData} setSuccess={setSuccess} onCaptureCheckout={onCaptureCheckout} />);
 
-  return (
-    <>
+    return (
+      <>
       <CssBaseline />
       <div className={classes.toolbar} />
       <main className={classes.layout}>

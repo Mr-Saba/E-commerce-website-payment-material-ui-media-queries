@@ -15,6 +15,9 @@ const App = () => {
     const [cart, setCart] = useState([]);
     const [order, setOrder] = useState({});
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [isFinished, setIsFinished] = useState(false)
+
 
     const fetchProducts = async () => {
         const { data } = await commerce.products.list();
@@ -52,10 +55,8 @@ const App = () => {
 
     const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
     try {
-        const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder);
 
-        setOrder(incomingOrder);
-
+        setOrder(newOrder);
         refreshCart();
     } catch (error) {
         setErrorMessage(error.data.error.message);
@@ -79,7 +80,7 @@ const App = () => {
                         <Cart cart={cart} onRemoveFromCart={handleRemoveFromCart} onUpdateCartQuantity={handleUpdateCartQuantity} />
                     </Route>
                     <Route path="/checkout" exact>
-                        <Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} />
+                        <Checkout isFinished={isFinished} setIsFinished={setIsFinished} cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} setSuccess={setSuccessMessage} success={successMessage} error={errorMessage} />
                     </Route>
                     <Route path="/about" exact component={About}></Route>
                     <Route path="/contact" exact component={Contact}></Route>
